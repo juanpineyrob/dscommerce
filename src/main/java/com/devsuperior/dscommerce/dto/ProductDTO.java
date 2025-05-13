@@ -1,9 +1,14 @@
 package com.devsuperior.dscommerce.dto;
 
+import com.devsuperior.dscommerce.entities.Category;
 import com.devsuperior.dscommerce.entities.Product;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDTO {
     private Long id;
@@ -17,6 +22,9 @@ public class ProductDTO {
     private Double price;
     private String imgUrl;
 
+    @NotEmpty(message = "Debe tener al menos una categoria")
+    private List<CategoryDTO> categories = new ArrayList<>();
+
     public ProductDTO() {
 
     }
@@ -29,12 +37,15 @@ public class ProductDTO {
         this.imgUrl = imgUrl;
     }
 
-    public ProductDTO(Product product) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.description = product.getDescription();
-        this.price = product.getPrice();
-        this.imgUrl = product.getImgUrl();
+    public ProductDTO(Product entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.description = entity.getDescription();
+        this.price = entity.getPrice();
+        this.imgUrl = entity.getImgUrl();
+        for(Category cat : entity.getCategories()) {
+            categories.add(new CategoryDTO(cat));
+        }
     }
 
     public Long getId() {
@@ -55,5 +66,9 @@ public class ProductDTO {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
     }
 }
