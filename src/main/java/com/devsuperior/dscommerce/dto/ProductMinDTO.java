@@ -7,7 +7,8 @@ import jakarta.validation.constraints.Size;
 
 public class ProductMinDTO {
     private Long id;
-    private String name;private Double price;
+    private String name;
+    private Double price;
     private String imgUrl;
 
     public ProductMinDTO() {

@@ -7,7 +7,6 @@ import com.devsuperior.dscommerce.repositories.OrderItemRepository;
 import com.devsuperior.dscommerce.repositories.OrderRepository;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class OrderService {
         order.setClient(user);
         for(OrderItemDTO itemDto : dto.getItems()) {
             Product product = productRepository.getReferenceById(itemDto.getProductId());
-            OrderItem orderItem = new OrderItem(order, product, itemDto.getQuantity(), itemDto.getPrice());
+            OrderItem orderItem = new OrderItem(order, product, itemDto.getQuantity(), product.getPrice());
             order.getItems().add(orderItem);
         }
         order = repository.save(order);
