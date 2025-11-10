@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 public class ProductMinDTO {
     private Long id;
     private String name;
+    private String description;
     private Double price;
     private String imgUrl;
 
@@ -25,6 +26,7 @@ public class ProductMinDTO {
     public ProductMinDTO(Product entity) {
         this.id = entity.getId();
         this.name = entity.getName();
+        this.description = entity.getDescription();
         this.price = entity.getPrice();
         this.imgUrl = entity.getImgUrl();
     }

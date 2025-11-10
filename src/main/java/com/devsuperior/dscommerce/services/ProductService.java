@@ -33,13 +33,20 @@ public class ProductService {
                 () -> new ResourceNotFoundException("Recurso no encontrado"));
         return new ProductDTO(result);
     }
+//
+//    @Transactional(readOnly = true)
+//    public Page<ProductMinDTO> findAll(Pageable pageable) {
+//        Page<Product> result = productRepository.findAll(pageable);
+//        return result.map(ProductMinDTO::new);
+//    }
 
     @Transactional(readOnly = true)
-    public Page<ProductMinDTO> findAll(Pageable pageable) {
-        Page<Product> result = productRepository.findAll(pageable);
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
+        Page<Product> result = productRepository.findProductsByName(name, pageable);
         return result.map(ProductMinDTO::new);
     }
 
+    // No valida si el producto existe
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
         Product entity = new Product();
