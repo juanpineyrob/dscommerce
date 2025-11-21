@@ -36,12 +36,8 @@ public class UserServiceTests {
     private CustomUserUtil customUserUtil;
 
     private User userRoleClient;
-    private User userRoleAdmin;
 
     private List<UserDetailsProjection> roleClientUserDetails;
-    private List<UserDetailsProjection> roleAdminUserDetails;
-
-    private UserDTO userDTO;
 
     private String existingEmail,
                 nonExistingEmail;
@@ -52,9 +48,7 @@ public class UserServiceTests {
         nonExistingEmail = "non-ex@ds.com";
 
         userRoleClient = UserFactory.createRoleClientUser(existingEmail);
-        userRoleAdmin = UserFactory.createRoleClientUser(existingEmail);
 
-        roleClientUserDetails = UserDetailsFactory.createRoleClientUserDetails(existingEmail);
         roleClientUserDetails = UserDetailsFactory.createRoleClientUserDetails(existingEmail);
 
         Mockito.when(userRepository.searchUserAndRolesByEmail(existingEmail)).thenReturn(roleClientUserDetails);
@@ -75,7 +69,7 @@ public class UserServiceTests {
     @Test
     void loadUserByUsernameShouldThrowUsernameNotFoundExceptionWhenUserDoesNotExist() {
         Throwable exception = Assertions.assertThrows(UsernameNotFoundException.class, () -> {
-            UserDetails result = userService.loadUserByUsername(nonExistingEmail);
+            userService.loadUserByUsername(nonExistingEmail);
         });
 
         Assertions.assertEquals("Email not found", exception.getMessage());
@@ -96,7 +90,7 @@ public class UserServiceTests {
         Mockito.when(customUserUtil.getLoggedUsername()).thenThrow(ClassCastException.class);
 
         Throwable exception = Assertions.assertThrows(UsernameNotFoundException.class, () -> {
-            User user = userService.authenticated();
+            userService.authenticated();
         });
 
         Assertions.assertEquals("Email not found", exception.getMessage());
@@ -118,7 +112,7 @@ public class UserServiceTests {
         Mockito.doThrow(UsernameNotFoundException.class).when(userService).authenticated();
 
         Throwable exception = Assertions.assertThrows(UsernameNotFoundException.class, () -> {
-            UserDTO userDTO = userService.getMe();
+            userService.getMe();
         });
     }
 }

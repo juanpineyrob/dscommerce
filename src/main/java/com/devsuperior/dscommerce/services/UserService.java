@@ -8,12 +8,9 @@ import com.devsuperior.dscommerce.repositories.UserRepository;
 import com.devsuperior.dscommerce.utils.CustomUserUtil;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,13 +28,13 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         List<UserDetailsProjection> result = repository.searchUserAndRolesByEmail(username);
-        if (result.size() == 0) {
+        if (result.isEmpty()) {
             throw new UsernameNotFoundException("Email not found");
         }
 
         User user = new User();
-        user.setEmail(result.get(0).getUsername());
-        user.setPassword(result.get(0).getPassword());
+        user.setEmail(result.getFirst().getUsername());
+        user.setPassword(result.getFirst().getPassword());
         for (UserDetailsProjection projection : result) {
             user.addRole(new Role(projection.getRoleId(), projection.getAuthority()));
         }
@@ -48,7 +45,7 @@ public class UserService implements UserDetailsService {
     protected User authenticated() {
         try {
             String username = customUserUtil.getLoggedUsername();
-            return repository.findByEmail(username).get();
+            return repository.findByEmail(username).isPresent() ? repository.findByEmail(username).get() : null;
         }
         catch (ClassCastException e) {
           throw new UsernameNotFoundException("Email not found");
@@ -58,6 +55,7 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDTO getMe() {
         User user = authenticated();
+        System.out.println(user.getId());
         return new UserDTO(user);
     }
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO {
+    private Long id;
     private String name;
     private String email;
     private String phone;
@@ -20,7 +21,8 @@ public class UserDTO {
 
     }
 
-    public UserDTO(String name, String email, String phone, LocalDate birthDate, String password, List<String> roles) {
+    public UserDTO(Long id, String name, String email, String phone, LocalDate birthDate, String password, List<String> roles) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -30,6 +32,7 @@ public class UserDTO {
     }
 
     public UserDTO(User entity) {
+        id = entity.getId();
         name = entity.getName();
         email = entity.getEmail();
         phone = entity.getPhone();
@@ -39,6 +42,8 @@ public class UserDTO {
             roles.add(authority.getAuthority());
         }
     }
+
+    public Long getId() { return id; }
 
     public String getName() {
         return name;

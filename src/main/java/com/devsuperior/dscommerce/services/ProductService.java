@@ -17,10 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class ProductService {
 
@@ -42,7 +38,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
-        Page<Product> result = productRepository.findProductsByName(name, pageable);
+        Page<Product> result = productRepository.searchByName(name, pageable);
         return result.map(ProductMinDTO::new);
     }
 
